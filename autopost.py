@@ -8,15 +8,13 @@ API_KEY = os.getenv("OPENROUTER_API_KEY")
 PROMPT = """
 تو یک تحلیلگر حرفه‌ای بازارهای مالی هستی.
 
-برای کانال تلگرام DiyaGold یک پست فارسی تولید کن.
+برای کانال تلگرام DiyaGold یک پست فارسی حرفه‌ای تولید کن.
 
-شرایط:
-- حدود 200 تا 300 کلمه
-- شامل تحلیل کوتاه طلا (XAUUSD)
-- تحلیل کوتاه بیت کوین
+شامل:
+- تحلیل کوتاه طلا
+- تحلیل بیت‌کوین
 - یک نکته آموزشی ترید
 - پایان با هشتگ‌های مرتبط
-- متن جذاب و قابل انتشار
 """
 
 headers = {
@@ -31,7 +29,10 @@ data = {
             "role": "user",
             "content": PROMPT
         }
-    ]response = requests.post(
+    ]
+}
+
+response = requests.post(
     "https://openrouter.ai/api/v1/chat/completions",
     headers=headers,
     json=data
@@ -40,11 +41,14 @@ data = {
 print("Status:", response.status_code)
 print("Response:", response.text)
 
-response.raise_for_status()
+if response.status_code != 200:
+    raise Exception(response.text)
 
-text = response.json()["choices"][0]["message"]["content"]
+result = response.json()
 
-requests.post(
+text = result["choices"][0]["message"]["content"]
+
+telegram = requests.post(
     f"https://api.telegram.org/bot{BOT_TOKEN}/sendMessage",
     json={
         "chat_id": CHAT_ID,
@@ -52,4 +56,5 @@ requests.post(
     }
 )
 
-print("Message Sent Successfully")
+print("Telegram:", telegram.status_code)
+print("Done!")
