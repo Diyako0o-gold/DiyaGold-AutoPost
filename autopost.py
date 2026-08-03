@@ -32,15 +32,14 @@ data = {
             "content": PROMPT
         }
     ]
-}
-
-response = requests.post(
+}response = requests.post(
     "https://openrouter.ai/api/v1/chat/completions",
     headers=headers,
     json=data
 )
 
 text = response.json()["choices"][0]["message"]["content"]
+
 
 requests.post(
     f"https://api.telegram.org/bot{BOT_TOKEN}/sendMessage",
