@@ -31,15 +31,18 @@ data = {
             "role": "user",
             "content": PROMPT
         }
-    ]
-}response = requests.post(
+    ]response = requests.post(
     "https://openrouter.ai/api/v1/chat/completions",
     headers=headers,
     json=data
 )
 
-text = response.json()["choices"][0]["message"]["content"]
+print("Status:", response.status_code)
+print("Response:", response.text)
 
+response.raise_for_status()
+
+text = response.json()["choices"][0]["message"]["content"]
 
 requests.post(
     f"https://api.telegram.org/bot{BOT_TOKEN}/sendMessage",
