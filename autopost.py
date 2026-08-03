@@ -8,11 +8,12 @@ API_KEY = os.getenv("OPENROUTER_API_KEY")
 PROMPT = """
 تو یک تحلیلگر حرفه‌ای بازارهای مالی هستی.
 
-برای کانال تلگرام DiyaGold یک پست فارسی حرفه‌ای تولید کن.
+برای کانال تلگرام DiyaGold یک پست فارسی تولید کن.
 
-شامل:
-- تحلیل کوتاه طلا
-- تحلیل بیت‌کوین
+شرایط:
+- حدود 200 تا 300 کلمه
+- شامل تحلیل کوتاه طلا (XAUUSD)
+- تحلیل کوتاه بیت کوین
 - یک نکته آموزشی ترید
 - پایان با هشتگ‌های مرتبط
 """
@@ -45,7 +46,6 @@ if response.status_code != 200:
     raise Exception(response.text)
 
 result = response.json()
-
 text = result["choices"][0]["message"]["content"]
 
 telegram = requests.post(
