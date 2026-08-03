@@ -1,0 +1,1 @@
+# DiyaGold-AutoPost
